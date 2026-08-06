@@ -4,6 +4,11 @@
 
 ## Atlas at a glance
 
+![Atlas architecture — a layered north-south security chain (Internet - FGT01 perimeter - PFSENSE01 inline IPS - 1941 routed core - MKT01 east-west firewall - SW01 access) into east-west-segmented VLANs, virtualized on PVE01/PVE02](docs/atlas-topology.png)
+
+<details>
+<summary>Architecture diagram — Mermaid source (click to expand)</summary>
+
 ```mermaid
 flowchart TB
     NET([Internet])
@@ -37,6 +42,8 @@ flowchart TB
     class NET,FGT,IPS edge;
     class CORE,EW,SW core;
 ```
+
+</details>
 
 *A layered north-south security chain into an east-west-segmented enterprise, virtualized on two hypervisors. Every box is a real, documented device — browse them all in [`INDEX.md`](INDEX.md).*
 
