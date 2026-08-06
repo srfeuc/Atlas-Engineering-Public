@@ -1,0 +1,21 @@
+%% Atlas — Rebuild dependency chain
+%% See 048-Teardown-and-Rebuild-Runbook.md
+%% Each layer MUST validate before the next is built.
+graph TD
+    P0["PHASE 0 — EXTRACTION<br/>Vaultwarden export, CA backup,<br/>device configs, PRINT PASSWORDS"]
+    BOOT["Bootstrap access<br/>SW01 console 9600 · MKT01 WinBox by MAC<br/>FGT01 192.168.1.99"]
+    PHY["Physical layer<br/>Cable per port map. Link lights."]
+    SW["SW01 — Layer 2<br/>VLANs, trunks, STP root, DAI"]
+    MKT["MKT01 — Layer 3<br/>hw=no on ether3, gateways, 22 rules"]
+    FGT["FGT01 — perimeter<br/>transit, /8 route, NAT"]
+    VAL{"Management plane<br/>all 4 devices ping?"}
+    PI["Pi01 — RESTORE, don't rebuild<br/>Lab CA, Pi-hole, RADIUS, Vaultwarden"]
+    CERT["Certs and RADIUS<br/>re-import, re-bind, use-radius=yes"]
+    PVE["PVE01<br/>vmbr0, add MAC to STATIC-HOSTS"]
+
+    P0 --> BOOT --> PHY --> SW --> MKT --> FGT --> VAL
+    VAL -->|yes| PI --> CERT --> PVE
+    VAL -->|no| SW
+
+    classDef stop fill:#FCEBEB,stroke:#A32D2D,color:#501313
+    class P0 stop

@@ -1,0 +1,30 @@
+%% Atlas — Logical / Layer 3
+%% MKT01 owns inter-VLAN routing. FGT01 owns NAT and the perimeter.
+%% SW01 is Layer 2 only. Proxmox does not route.
+graph TD
+    INET[Internet]
+    HOME["Home network<br/>172.31.4.0/22"]
+    FGT["FGT01 — security edge<br/>NAT, policy, DNS-over-TLS"]
+    TRANSIT{{"Transit 172.16.0.0/29"}}
+    MKT["MKT01 — core router<br/>All VLAN gateways. NO NAT."]
+
+    V10["VLAN 10 Management<br/>10.10.0.0/24"]
+    V20["VLAN 20 Servers<br/>10.20.0.0/24"]
+    V40["VLAN 40 Monitoring<br/>10.40.0.0/24 — EMPTY"]
+    V50["VLAN 50 Clients<br/>10.50.0.0/24"]
+    V70["VLAN 70 Testing<br/>ISOLATED — internet only"]
+    V999["VLAN 999<br/>native parking, no IP"]
+
+    INET --> HOME --> FGT
+    FGT --> TRANSIT --> MKT
+    MKT --> V10
+    MKT --> V20
+    MKT --> V40
+    MKT --> V50
+    MKT --> V70
+    MKT -.-> V999
+
+    classDef empty fill:#FAEEDA,stroke:#854F0B,color:#412402
+    classDef iso fill:#FCEBEB,stroke:#A32D2D,color:#501313
+    class V40 empty
+    class V70,V999 iso

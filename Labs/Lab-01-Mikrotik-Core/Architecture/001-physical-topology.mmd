@@ -1,0 +1,28 @@
+%% Atlas — Physical Cabling
+%% Source of truth: 003-Physical-Topology.md
+%% Reconciled against SW01 live port table, 2026-07-12
+graph TD
+    ISP[Home router]
+    FGT["FGT01<br/>FortiGate 60E"]
+    MKT["MKT01<br/>RB1100AHx4"]
+    SW["SW01<br/>Catalyst 2960X"]
+    PVE["PVE01<br/>Dell R410"]
+    PI["Pi01<br/>Raspberry Pi 4"]
+    WS["Admin workstation"]
+    LAB["LabComputer"]
+    IDRAC["iDRAC 10.10.0.100<br/>PORT NOT RECORDED"]
+    SPAN["Analyzer<br/>SPAN destination"]
+
+    ISP     -->|"wan1 (DHCP)"| FGT
+    FGT     -->|"internal1 to ether1<br/>172.16.0.0/29 transit"| MKT
+    SW      -->|"Gi1/0/6 to internal2<br/>VLAN 10 access"| FGT
+    MKT     -->|"ether3 to Gi1/0/1<br/>TRUNK, native VLAN 999"| SW
+    MKT     -->|"ether4-13, bridgeLocal<br/>10.0.0.0/24 RECOVERY"| WS
+    SW      -->|"Gi1/0/4<br/>TRUNK, native VLAN 10"| PVE
+    SW      -->|"Gi1/0/7<br/>access, VLAN 10"| PI
+    SW      -->|"Gi1/0/2<br/>access, VLAN 10"| LAB
+    SW      -.->|"Gi1/0/5<br/>mirrors Gi1/0/1"| SPAN
+    SW      -.->|"???"| IDRAC
+
+    classDef gap fill:#FCEBEB,stroke:#A32D2D,color:#501313
+    class IDRAC gap

@@ -1,0 +1,12 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "atlas-secret-filename"
+description = "A file whose NAME suggests it holds a secret - CM-0014"
+regex = '''(?s).{8,}'''
+path = '''(?i)(passphrase|secret|credential|password|\.env$|\.key$|\.pem$)'''
+
+  [rules.allowlist]
+  description = "Atlas DOCUMENTATION about secrets is not a secret. Records are .md; leaked secrets were .txt."
+  paths = ['''\.md$''']

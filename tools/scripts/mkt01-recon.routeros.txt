@@ -1,0 +1,54 @@
+# MKT01 read-only reconciliation battery (MikroTik RouterOS 7.23.x)
+# Pairs with: 054-MKT01-Verification-Procedure.md
+#
+# HOW TO RUN: SSH  ->  ssh SethAdmin@10.10.0.1 -p 2222     (or WinBox :8291 -> New Terminal)
+#             from VLAN 10 (10.10.0.0/24) or the bridgeLocal recovery net (10.0.0.0/24).
+#             Paste the block below, then paste the raw output back.
+#
+# READ-ONLY: every line is `print`. NO set / add / remove, NO config change.
+# NO SECRETS: `/radius print` (NOT `print detail`); `/snmp print` shows state only -
+#   do NOT run `/snmp community print`, that reveals the community string. No password prints.
+# 🔴 Use a stable SSH or WinBox session - NOT a MAC-WinBox session - and NEVER modify the
+#    RECOVERY interface list while on MAC-WinBox (it kills the session). These are all reads.
+
+# --- A. Identity + platform (022 Platform) ---
+/system identity print
+/system resource print
+/system routerboard print
+/disk print
+/system clock print
+/system ntp client print
+
+# --- B. Interfaces / bridges / addressing (022 Interfaces/Bridge/VLAN) ---
+/interface ethernet print
+/interface bridge print
+/interface bridge port print
+/ip address print detail
+/interface vlan print
+
+# --- C. Routing + firewall (022 Routing/Firewall) ---
+/ip route print
+/ip firewall filter print count-only
+/ip firewall filter print
+/ip firewall nat print
+
+# --- D. Services / accounts / RADIUS / cert / DNS (022 Management/RADIUS/DNS) ---
+/ip service print detail
+/user print
+/user aaa print
+/radius print
+/certificate print detail
+/ip dns print
+
+# --- E. Layer-2 management / recovery (022 L2 Management State) ---
+/interface list member print where list=RECOVERY
+/tool mac-server mac-winbox print
+/tool mac-server print
+/ip neighbor discovery-settings print
+/snmp print
+
+# Expected values (device-verified against 022 v2.8) are in 054-MKT01-Verification-Procedure.md.
+# Anything that does not match is a finding for 055-MKT01-Considerations-and-Risks.md (device wins, Rule 13).
+# Note: /ip service print detail may show a DYNAMIC WinBox row (D c) with no restriction while you
+#   are connected over WinBox - re-check it from an SSH session with no WinBox open to confirm it's just
+#   the live-session artefact (022 flags this as unverified).

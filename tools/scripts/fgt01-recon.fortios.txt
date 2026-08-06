@@ -1,0 +1,24 @@
+# FGT01 read-only reconciliation battery (FortiOS v7.4.x)
+# Pairs with: 058-FGT01-Verification-Procedure.md
+#
+# HOW TO RUN: ssh admin@10.10.0.254   (or GUI > Dashboard > CLI Console)
+#             paste the commands below, then paste the raw output back.
+#
+# READ-ONLY: every line is get / diagnose / show / execute time. NO config changes.
+# get, NOT show, for state (show hides defaults - the MC-0001 unbound-cert lesson).
+# NO SECRETS: do not paste any line containing ENC or a password/key. None below need one.
+
+get system status
+get system interface
+get system interface physical
+show full-configuration system ntp
+diagnose sys ntp status
+execute time
+get firewall address
+get firewall policy
+show firewall policy 1
+get system global | grep admin-server-cert
+get system dns
+
+# Expected values (device-verified 2026-07-16) are in 058-FGT01-Verification-Procedure.md.
+# Anything that does not match is a finding for 059-FGT01-Considerations-and-Risks.md (device wins, Rule 13).

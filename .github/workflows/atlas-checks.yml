@@ -1,0 +1,51 @@
+name: Atlas Checks
+
+# Repo guardrails that used to be a local pre-commit hook (CM-0020 flagged it as
+# non-portable). This runs them for everyone, on every push and PR.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  secrets:
+    name: gitleaks (no secrets)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  links:
+    name: markdown link check (live tree only)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: check links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          use-verbose-mode: 'yes'
+          config-file: '.github/mlc-config.json'
+          # 99-Archive is frozen history and intentionally references old paths -
+          # it is NOT checked. Broaden folder-path as more live areas fill in.
+          folder-path: 'Labs,00-Atlas-Foundation,tools,04-Identity-and-PKI,05-Monitoring-and-Logging,06-Security,07-Backup-and-Recovery,08-Labs,Atlas-Academy'
+          file-path: './README.md,./PORTFOLIO.md,./Atlas-Blueprint.md'
+
+  lineendings:
+    name: LF only (per .gitattributes)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: reject CRLF in tracked markdown
+        run: |
+          if git grep -I --line-number $'\r' -- '*.md'; then
+            echo "::error::CRLF found in tracked markdown; enforce LF per .gitattributes"
+            exit 1
+          fi
+          echo "All tracked markdown is LF-clean."

@@ -1,0 +1,51 @@
+# Credentials and local settings
+*.token
+*.secret
+.env
+AtlasConfig.local.json
+
+# Device backups may contain secrets
+*.backup
+*.conf
+*.cfg
+*.rsc
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary output
+_temp/
+_output/
+*.log
+
+*.zip
+
+# CM-0014 name-based backstops
+*passphrase*
+*secret*
+*.key
+*.pem
+*.env
+
+# Policy docs name secrets/credentials by design - keep them tracked (POL-0002 etc.)
+!00-Atlas-Foundation/Policies/POL-*.md
+
+# FUSE bridge leftovers (device-side open-file handles) — never track
+.fuse_hidden*
+**/.fuse_hidden*
+
+# Internal git bundles + one-time delivery-staging folders — not part of the public repo (#38 de-noise)
+*.bundle
+_delivery-*/
+_to_delete/
+
+# Source-of-truth capture dumps (raw device `show` output — scrub before it becomes a doc)
+*-sot.txt
+
+# Documentation ABOUT secrets is not a secret (matches the .gitleaks.toml .md allowlist).
+# Keep secret-/passphrase-NAMED markdown docs tracked; backstops above are for real secret files (.txt/.key/.pem/.env).
+!*secret*.md
+!*passphrase*.md

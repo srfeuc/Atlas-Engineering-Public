@@ -1,0 +1,42 @@
+Atlas Engineering Repository
+Copyright (c) 2026 Seth
+
+This work — the documentation, diagrams, and accompanying original materials in
+this repository — is licensed under the
+
+    Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+YOU ARE FREE TO:
+  - Share  — copy and redistribute the material in any medium or format.
+  - Adapt  — remix, transform, and build upon the material for any purpose,
+             even commercially.
+
+UNDER THE FOLLOWING TERMS:
+  - Attribution — You must give appropriate credit, provide a link to the
+    license, and indicate if changes were made. You may do so in any reasonable
+    manner, but not in any way that suggests the licensor endorses you or your
+    use.
+  - No additional restrictions — You may not apply legal terms or technological
+    measures that legally restrict others from doing anything the license
+    permits.
+
+The full legal code of this license is at:
+    https://creativecommons.org/licenses/by/4.0/legalcode
+A human-readable summary is at:
+    https://creativecommons.org/licenses/by/4.0/
+
+The canonical CC BY 4.0 legal code at the URL above is the authoritative text
+and governs in the event of any discrepancy with this file.
+
+--------------------------------------------------------------------------------
+SCOPE AND THIRD-PARTY MARKS
+
+Atlas is a personal learning and portfolio environment (see the disclaimer in
+README.md). "Atlas Industrial" is a fictional company and does not represent any
+real organization.
+
+This license covers only the original Atlas documentation and materials.
+Third-party product names, trademarks, logos, and command syntax referenced in
+this documentation (e.g. Cisco, MikroTik, FortiGate, Microsoft, Proxmox, and
+others) belong to their respective owners and are used for identification and
+educational purposes only — they are not covered by this license.

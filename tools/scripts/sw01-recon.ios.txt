@@ -1,0 +1,51 @@
+# SW01 read-only reconciliation battery (Cisco IOS 15.2, Catalyst 2960X)
+# Pairs with: 056-SW01-Verification-Procedure.md
+#
+# HOW TO RUN: ssh sw01                        (alias; or use the legacy-flag form in 027 / 023)
+#             SW01# terminal length 0          (turn the pager off for this session only)
+#             paste the commands below, then paste the raw output back.
+#
+# READ-ONLY: every line is show / terminal. NO config changes, NO write memory.
+# NO SECRETS: do NOT paste `show running-config` in full - it prints `enable secret`,
+#   `username ... secret`, and the SNMP community. This battery uses scoped `show run |`
+#   sections that carry no secret. SNMP is a MANUAL redacted step at the bottom.
+# EMPTY OUTPUT IS NOT A PASS (Rule 13) - a command that returns nothing means the capture
+#   failed, not that the device is clean. Re-run until you see real content.
+
+terminal length 0
+
+# --- A. Identity + platform (027, 023) ---
+show version
+show run | include hostname|ip domain-name|ip default-gateway
+
+# --- B. Clock + NTP (CM-0030 - the headline) ---
+show clock detail
+show ntp status
+show ntp associations
+
+# --- C. VLANs + interfaces (023, 027) ---
+show vlan brief
+show ip interface brief
+show interfaces status
+show interfaces trunk
+
+# --- D. Layer-2 security (023 L2 Security, 027 s8/s9/s16) ---
+show ip access-lists
+show ip arp inspection
+show ip dhcp snooping
+show ip dhcp snooping binding
+show arp access-list
+show port-security
+
+# --- E. Control plane + management hardening (045, 027) ---
+show spanning-tree summary
+show monitor session 1
+show run | include no cdp run|no ip http|logging host|aaa new-model|snmp-server location
+show run | section line vty
+
+# --- SNMP: MANUAL, REDACTED. Run this by hand and paste ONLY the version + trap host.
+#     REDACT the community string (it is a live cleartext v2c secret - CM-0023).
+# show snmp host
+
+# Expected values (device-verified 2026-07-16) are in 056-SW01-Verification-Procedure.md.
+# Anything that does not match is a finding for 057-SW01-Considerations-and-Risks.md (device wins, Rule 13).
